@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>UV App</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/font-awesome-min.css">
+    <script src="../js/vue.js"></script>
+</head>
+<body class="container">
+    <div id="index_app">
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-faded">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Brand -->
+            <a class="navbar-brand" href="#">UV</a>
+
+            <!-- Links -->
+            <div class="collapse navbar-collapse" id="nav-content">   
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <br /><br /><br /><br />
+
+        <section>
+            <div class="row">
+                <div class="col-md-3">
+                    <section class="card">
+                        <div class="card-block padding-20">
+                            <h4>Operator</h4>
+                            <hr>
+                            <a href="./rides/create.html">Create a Ride</a>
+                            <hr>
+                            <a href="./locations/create.html">Create a Location</a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-md-9">
+                    <div class="ride-list row">
+                        <div class="col-md-12">
+                            <h2>Today's Rides</h2>
+                            <br>
+                        </div>
+                        <a href="./rides/index.html" v-for="ride in todays_rides" class="col-md-4 ride-item">
+                            <img src="../images/placeholder.jpg" style="object-fit: cover; height: 300px; width: 100%;">
+                            <h4>Manila to Dagupan</h4>
+                            <p>
+                                <small>
+                                Leaves at 8:00pm
+                                <br />
+                                Monday, Oct. 2
+                                </small>
+                            </p>
+                        </a>
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-primary">See more rides</button>
+                        </div>
+                        <br /><br /><br />
+                    </div> <!-- End of ride list -->
+                </div>
+            </div>
+        </section>
+
+        
+        <section>
+            <div class="ride-list row">
+                <div class="col-md-12">
+                    <h2>Rides</h2>
+                    <br>
+                </div>
+                <a href="ride.html" v-for="ride in rides" class="col-md-3 ride-item">
+                    <img src="../images/placeholder.jpg" style="object-fit: cover; height: 300px; width: 100%;">
+                    <h4>Manila to Dagupan</h4>
+                    <p>
+                        <small>
+                        Leaves at 8:00pm
+                        <br />
+                        Monday, Oct. 2
+                        </small>
+                    </p>
+                </a>
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-primary">See more rides</button>
+                </div>
+                <br /><br /><br />
+            </div>
+        </section>
+    </div>
+
+
+    <footer>
+        <hr />
+        <p><small>(c) 2017</small></p>
+    </footer>
+</body>
+<script>
+    var app = new Vue({
+        el: "#index_app",
+        data: {
+            rides: [1, 1, 1, 1, 1, 1, 1, 1],
+            todays_rides: [1, 1, 1]
+        }
+    })
+</script>
+</html>

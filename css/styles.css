@@ -1,0 +1,13 @@
+.ride-item {
+    color: black;
+    text-decoration: none; /* no underline */
+    margin-bottom: 5px;
+}
+
+.ride-item:hover {
+    text-decoration: none; /* no underline */
+}
+
+.ride-item h4 {
+    margin: 5px 0px 0px 0px;
+}
