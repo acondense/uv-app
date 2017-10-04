@@ -7,23 +7,24 @@
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <script src="../../js/vue.js"></script>
+    <script src="../../js/axios.min.js"></script>
 </head>
 <body class="container">
-    <div id="#create_location_app">
+    <div id="create_location_app">
         <br><br><br><br>
         <section class="row">
             <div class="col-md-6">
                 <h1>Add a new Location.</h1>
                 <br>
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="Location name  ">
+                    <input v-model="name" name="name" type="text" class="form-control form-control-lg" placeholder="Location name  ">
                 </div>
                 <br>
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" placeholder="Ex: Address">
+                    <input v-model="address" name="address" type="text" class="form-control form-control-sm" placeholder="Ex: Address">
                 </div>
                 <br>
-                <button class="btn btn-lg btn-primary">Add Location</button>
+                <button class="btn btn-lg btn-primary" v-on:click="addLocation">Add Location</button>
             </div>
             <section class="col-md-6 text-center">
                 <img src="../../images/placeholder.jpg" style="object-fit: cover; height: 450px; width: 300px;">
@@ -31,5 +32,25 @@
         </section>
     </div>
 </body>
-
+<script>
+    var app = new Vue({
+        el: "#create_location_app",
+        data: {
+            name: '',
+            address: ''
+        },
+        methods: {
+            addLocation: function() {
+                axios.post('../../api/locations/create.php', {
+                    'name': this.name,
+                    'address': this.address
+                }).then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.log(error);
+                });
+            }
+        }
+    });
+</script>
 </html>

@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <script src="../../js/vue.js"></script>
+    <script src="../../js/axios.min.js"></script>
+    <script src="../../js/moment.js"></script>
 </head>
 <body class="container">
-    <div id="#create_location_app">
+    <div id="create_ride_app">
         <br><br><br><br>
         <section class="row">
             <div class="col-md-6">
@@ -17,28 +19,94 @@
                 <br>
                 <h5>From:</h5>
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="Location name  ">
+                    <select v-model="start_id" class="form-control" placeholder="Location name">
+                        <option v-for="location in locations" :value="location.id" required>
+                            {{ location.name}}
+                        </option>
+                    </select>
                 </div>
                 <br>
                 <h5>To:</h5>
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="Location name  ">
+                    <select v-model="end_id" v-on:change="endLocChanged" class="form-control" placeholder="Location name">
+                        <option v-for="location in locations" :value="location.id" required>
+                            {{ location.name}}
+                        </option>
+                    </select>
                 </div>
                 <br>
                 <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" placeholder="Time  ">
-                    <input type="text" class="form-control form-control-sm" placeholder="Date  ">
+                    <input type="time" v-model="time" value="08:00" class="form-control form-control-sm" placeholder="Time">
+                    <input type="date" v-model="date" class="form-control form-control-sm" placeholder="Date">
                 </div>
                 <br>
-                <button class="btn btn-lg btn-primary">Create Ride</button>
+                <div class="input-group">
+                    <div class="input-group-addon lead">Seats</div>
+                    <input type="number" v-model="seats" class="form-control form-control-lg" value="16" min="1" placeholder="No. of seats">
+                </div>
+                <br>
+                <div class="input-group">
+                    <textarea v-model="info" class="form-control" placeholder="(Optional) About this ride. (Ex. Plate NUMBER, Contact Person, etc"></textarea>
+                </div>
+                <br>
+                <button class="btn btn-lg btn-primary" v-on:click="createRide" :disabled="isDisable">Create Ride</button>
                 <hr />  
                 <p>Location is not on the list? Click <a href="../locations/create.html">here</a> to add a location.</p>
             </div>
             <section class="col-md-6 text-center">
-                <img src="../../images/placeholder.jpg" style="object-fit: cover; height: 450px; width: 300px;">
+                <img :src="'../../images/locations/' + end_location.image" style="object-fit: cover; height: 450px; width: 300px;">   
             </section>
         </section>
     </div>
 </body>
-
+<script>
+    var app = new Vue({
+        el: "#create_ride_app",
+        data: {
+            locations: [],
+            start_id: null,
+            end_id: null,
+            end_location: null,
+            time: "08:00",
+            date: moment().format("YYYY-MM-DD"),
+            seats: 16,
+            info: ''
+        },
+        methods: {
+            endLocChanged: function() {
+                var index = this.locations.map(e => e.id).indexOf(this.end_id);
+                this.end_location = this.locations[index];
+            },
+            createRide: function() {
+                axios.post('../../api/rides/create.php', {
+                    start_id: this.start_id,
+                    end_id: this.end_id,
+                    time: this.time,
+                    date: this.date,
+                    seats: this.seats,
+                    info: this.info
+                }).then(response => {
+                    window.location.href = '../';
+                }).catch(error => {
+                    console.log(error);
+                })
+            }
+        },
+        mounted() {
+            axios.get('../../api/locations')
+                .then(response => {
+                    this.locations = response.data.locations;
+                    this.end_location = this.locations[0];
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        computed: {
+            isDisable: function() {
+                return this.end_id == null || this.start_id == null;
+            }
+        }
+    })
+</script>
 </html>

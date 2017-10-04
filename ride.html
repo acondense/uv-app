@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/font-awesome-min.css">
     <link rel="stylesheet" href="css/common.css">
     <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/utils.js"></script>
 </head>
 <body class="container">
     <div id="ride_app">
@@ -17,8 +19,16 @@
         <section class="col-md-8">
             <br />
             <h6>About this Ride</h6>
-            <h1>Manila to Dagupan</h1>
-            <p>
+            <h1>{{ride.start_name}} to {{ride.end_name}}</h1>
+            <!-- <p>
+                <small>
+                    Start Address:
+                    {{ ride.start_address }}
+                    <br>
+                    End Address:
+                    {{ ride.end_address }}
+                </small></p>
+            <p> -->
                 <small>
                 Leaves at 8:00pm
                 <br />
@@ -53,7 +63,7 @@
 
         </section>
         <section class="col-md-4">
-            <img src="images/placeholder.jpg" style="object-fit: cover; height: 450px; width: 300px;">
+            <img :src="'images/locations/' + ride.end_image" style="object-fit: cover; height: 450px; width: 300px;">
         </section>
         </div>
 
@@ -69,7 +79,8 @@
             reservations: 3,
             users: [1, 1, 1],
             qty: 1,
-            seats: 12
+            seats: 12,
+            ride: {}
         },
         methods: {
             toggleReserve: function() {
@@ -79,8 +90,16 @@
                     this.reservations += this.qty;
                 }
                 this.hasReserved = !this.hasReserved;
-                console.log(this.reservations);
             }
+        },
+        mounted() {
+            axios.get('api/rides?id=' + query['id'])
+                .then(response => {
+                    this.ride = response.data.ride;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
     })
 </script>

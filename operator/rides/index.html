@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../css/font-awesome-min.css">
     <link rel="stylesheet" href="../../css/common.css">
     <script src="../../js/vue.js"></script>
+    <script src="../../js/axios.min.js"></script>
+    <script src="../../js/utils.js"></script>
 </head>
 <body class="container">
     <div id="ride_app">
@@ -80,6 +82,11 @@
                 this.hasReserved = !this.hasReserved;
                 console.log(this.reservations);
             }
+        },
+        mounted() {
+            // axios.get('ride?id=')
+            alert(query['id']);
+            console.log('nice');
         }
     })
 </script>

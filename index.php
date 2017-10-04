@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/font-awesome-min.css">
     <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/moment.js"></script>
 </head>
 <body class="container">
     <div id="index_app">
@@ -62,19 +64,19 @@
                     <h2>Rides</h2>
                     <br>
                 </div>
-                <a href="ride.html" v-for="ride in rides" class="col-md-3 ride-item">
-                    <img src="images/placeholder.jpg" style="object-fit: cover; height: 300px; width: 100%;">
-                    <h4>Manila to Dagupan</h4>
+                <a :href="'ride.html?id=' + ride.id" v-for="ride in rides" class="col-md-3 ride-item">
+                    <img :src="'images/locations/' + ride.end_image" style="object-fit: cover; height: 300px; width: 100%;">
+                    <h4>{{ ride.start_name }} to {{ ride.end_name }}</h4>
                     <p>
                         <small>
-                        Leaves at 8:00pm
+                        Leaves at {{ ride.time | moment_time }}
                         <br />
-                        Monday, Oct. 2
+                        {{ ride.date | moment_date }}
                         </small>
                     </p>
                 </a>
                 <div class="col-md-12 text-right">
-                    <button class="btn btn-primary">See more rides</button>
+                    <button class="btn btn-primary" v-on:click="loadRides()">See more rides</button>
                 </div>
                 <br /><br /><br />
             </div>
@@ -91,7 +93,31 @@
     var app = new Vue({
         el: "#index_app",
         data: {
-            rides: [1, 1, 1, 1, 1, 1, 1, 1]
+            rides: [],
+            page: 1
+        },
+        methods: {
+            loadRides: function() {
+                axios.get('./api/rides?page=' + this.page)
+                    .then(response => {
+                        this.rides.push.apply(this.rides, response.data.rides);
+                        this.page++;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        },
+        mounted() {
+            this.loadRides();
+        },
+        filters: {
+            moment_date: function(date) {
+                return moment(date).format('MMMM Do');
+            },
+            moment_time: function(time) {
+                return time
+            }
         }
     })
 </script>

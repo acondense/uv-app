@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>UV App</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/font-awesome-min.css">
+    <script src="../../js/vue.js"></script>
+    <script src="../../js/axios.min.js"></script>
+</head>
+<body class="container">
+    <div id="locations_app">
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-faded">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Brand -->
+            <a class="navbar-brand" href="#">UV</a>
+
+            <!-- Links -->
+            <div class="collapse navbar-collapse" id="nav-content">   
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservations.html">My Reservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <br /><br />
+
+        
+        <section>
+            <div class="ride-list row">
+                <div class="col-md-12">
+                    <h2>Locations</h2>
+                    <br>
+                </div>
+                <a href="./create.html" class="col-md-2">
+                    <div class="btn-default text-center location-item create card">
+                        <h4>+</h4>
+                        <h5>Add a new Location</h5>
+                    </div>
+                </a>
+                <a href="./location.html" v-for="location in locations" class="col-md-2 location-item">
+                    <img :src="'../../images/locations/' + location.image" class="rounded" style="object-fit: cover; height: 200px; width: 100%;">
+                    <h5>{{ location.name }}</h5>
+                    <p><small>{{ location.address }}</small></p>
+                </a>
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-primary">See more locations</button>
+                </div>
+                <br /><br /><br />
+            </div>
+        </section>
+    </div>
+
+
+    <footer>
+        <hr />
+        <p><small>(c) 2017</small></p>
+    </footer>
+</body>
+<script>
+    var app = new Vue({
+        el: "#locations_app",
+        data: {
+            locations: []
+        },
+        methods: {
+            loadLocations: function() {
+                axios.get('../../api/locations')
+                    .then(response => {
+                        console.log(response);
+                        this.locations = response.data.locations;
+                    })
+            }
+        },
+        mounted() {
+            this.loadLocations();
+        }
+    });
+    l
+</script>
+</html> 
