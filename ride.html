@@ -50,7 +50,7 @@
 
             <div v-if="!hasReserved">
                 <div class="input-group col-md-3 no-padding margin-bottom-10">
-                  <span class="input-group-addon" id="basic-addon1">Qty.</span>
+                  <span class="input-group-addon">Qty.</span>
                   <input type="number" value="1" min="1" :max="seats-reservations" class="form-control form-control-lg" placeholder="No. of Seats" aria-describedby="basic-addon1" v-model.number="qty">
                 </div>
                 <button class="btn btn-lg btn-primary" v-on:click="toggleReserve()">Reserve a Seat</button>
@@ -76,7 +76,7 @@
         el: "#ride_app",
         data: {
             hasReserved: false,
-            reservations: 3,
+            reservation: null,
             users: [1, 1, 1],
             qty: 1,
             seats: 12,
@@ -87,7 +87,16 @@
                 if (this.hasReserved){
                     this.reservations -= this.qty;
                 } else {
-                    this.reservations += this.qty;
+                    axios.post('api/reservations/create.php', {
+                        'qty': this.qty,
+                        'ride_id': query['id']
+                    }).then(response => {
+                        if (response.data.status == "OK") {
+                            this.reservations += this.qty;
+                        }
+                    }).catch(error => {
+                        console.log(error);
+                    })
                 }
                 this.hasReserved = !this.hasReserved;
             }
@@ -99,7 +108,13 @@
                 })
                 .catch(error => {
                     console.log(error);
-                })
+                });
+            axios.get('api/reservations?ride_id=' + query['id'])
+                .then(response => {
+                    this.reservation = this.response.data.reservation;
+                }).catch(error => {
+                    console.log(error);
+                });
         }
     })
 </script>

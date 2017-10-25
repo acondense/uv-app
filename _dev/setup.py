@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String,\
-    ForeignKey, Time, Date, DateTime
+    ForeignKey, Time, Date, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import sessionmaker
 from faker import Faker
 from random import randint
@@ -11,12 +11,27 @@ from sqlalchemy.sql import func
 Base = declarative_base()
 
 
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    firstname = Column(String(200))
+    lastname = Column(String(200))
+    email = Column(String(200), unique=True)
+    password = Column(String(200))
+    phone = Column(String(20))
+    image = Column(String(200))
+    timestamp = Column(DateTime, onupdate=func.utc_timestamp(),
+                       server_default=func.now())
+
+
 class Location(Base):
     __tablename__ = 'location'
     id = Column(Integer, primary_key=True)
     name = Column(String(200))
     address = Column(String(200))
     image = Column(String(200))
+    timestamp = Column(DateTime, onupdate=func.utc_timestamp(),
+                       server_default=func.now())
 
 
 class Ride(Base):
@@ -30,6 +45,15 @@ class Ride(Base):
     info = Column(String(500))
     timestamp = Column(DateTime, onupdate=func.utc_timestamp(),
                        server_default=func.now())
+
+
+class Reservation(Base):
+    __tablename__ = 'reservation'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete="CASCADE", onupdate="CASCADE"))
+    ride_id = Column(Integer, ForeignKey('ride.id', ondelete="CASCADE", onupdate="CASCADE"))
+    qty = Column(Integer, default=1)
+    qty_status = Column(Integer, default=0)
 
 
 # Setup connection

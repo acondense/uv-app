@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>UV App</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome-min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/utils.js"></script>
+</head>
+<body class="container">
+    <div id="login_app">
+
+        <br /><br /><br /><br />
+        <div class="row">
+        <section class="col-md-4 text-center">
+            <img src="images/locations/placeholder-1.jpg" style="object-fit: cover; height: 450px; width: 300px;">
+        </section>
+        <section class="col-md-4 text-center">
+            <br />
+            <h1>Login</h1>
+            <h5>To start travelling.</h5>
+            <br>
+            <h6>Email</h6>
+            <div class="input-group">
+                <input @keyup.enter="submit" v-model="email" type="email" class="form-control form-control-lg" placeholder="Email">
+            </div>
+            <br>
+            <h6>Password</h6>
+            <div class="input-group">
+                <input @keyup.enter="submit" v-model="password" type="password" class="form-control form-control-lg" placeholder="Password">
+            </div>
+            <br>
+            <button class="btn btn-block btn-lg btn-primary" v-on:click="submit">Log in</button>
+            <hr>
+            <p>Didn't have an account? Register <a href="./register.html">here</a>.</p>
+        </section>
+        <section class="col-md-4 text-center">
+            <img src="images/locations/placeholder-2.jpg" style="object-fit: cover; height: 450px; width: 300px;">
+        </section>
+        </div>
+
+        <br /><br /><br /><br />
+
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        el: "#login_app",
+        data: {
+            email: '',
+            password: ''
+        },
+        methods: {
+            submit: function() {
+                axios.post('api/login')
+                    .then(response => {
+                        if (response.data.status == 'OK')
+                            window.location.href = './index.php';
+                    }).catch(error => {
+                        console.log(error);
+                    });
+            }
+        }
+    })
+</script>
+</html>

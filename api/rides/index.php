@@ -29,7 +29,6 @@
                 ON s.id = ride.start_id
             INNER JOIN location as e
                 ON e.id = ride.end_id
-        WHERE ride.date >= CURDATE()
         ORDER BY ride.date
         LIMIT $page, 8";
         $rides = array();
